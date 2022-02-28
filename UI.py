@@ -8,6 +8,10 @@ Authors:        Luke Vandecasteele
 
 Last Edited:    2/27/2022
 Last Edit by:   Luke Vandecasteele
+
+Credits: User Akash Shendage for his post on how to make a scrollbar using
+         tkinter for an entire window.
+         https://stackoverflow.com/questions/19860047/python-tkinter-scrollbar-for-entire-window
 """
 
 
