@@ -119,14 +119,13 @@ class UI():
                              font=("Times New Roman", 18), justify=LEFT).pack()
 
         # For each question add the question and possible answer selections
+        y = 0
         for phrase in self.question:
-            new_frame = Frame(border)
-            new_frame.pack(anchor="w")
-            q = Label(new_frame, text=phrase, font=("Times New Roman", 18)).pack(side=LEFT)
+            q = Label(border, text=phrase, font=("Times New Roman", 18)).pack(anchor="w")
             for opt in range(3):
-                answer_frame = Frame(new_frame)
-                answer_frame.pack(side=LEFT)
-                new_option = Radiobutton(answer_frame, value=opt).grid(row=0, column=opt+1)
+                new_option = Radiobutton(border, value=opt)
+                new_option.place(x=850 + (45 * opt), y=155 + (29 * y))
+            y+=1
 
         self.survey.mainloop()
 
