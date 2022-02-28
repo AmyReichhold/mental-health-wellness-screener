@@ -12,6 +12,7 @@ Last Edit by:   Luke Vandecasteele
 
 
 from tkinter import *
+from tkinter import ttk
 
 # Place Holder questions
 questions = []
@@ -45,12 +46,12 @@ class UI():
         self.start = None
         self.survey = None
         self.question = questions   # this will be replaced with real question objects
-        self.init_interface()
+        # self.init_interface()
 
     def init_interface(self):
         self.start = Tk()
         self.start.title(PROJECT)
-        self.start.geometry("1000x500+100+100")
+        self.start.geometry("1000x500+375+175")
         self.start.configure(bg="turquoise")
         title = Label(self.start, text=TITLE, font=("Times New Roman", 32, "bold"),
                       bg="turquoise", fg='black').pack()
@@ -72,30 +73,59 @@ class UI():
         self.start.mainloop()
 
     def display_survey(self):
+        # Create window
         self.survey = Tk()
         self.survey.title(PROJECT)
-        width1 = self.survey.winfo_screenwidth()
-        height = self.survey.winfo_screenheight()
-        width = width1 - (width1 / 3)
-        self.survey.geometry("%dx%d+%d+0" % (width, height, width1/6))
-        scrollbar = Scrollbar(self.survey)
-        scrollbar.pack(side=RIGHT, fill=Y)
-        border = Frame(self.survey, width = width - 75, height = height)
-        border.pack(expand=True)
-        border.pack_propagate(False)
+        height = self.survey.winfo_screenheight() - 10
+        width = 1000
+        self.survey.geometry("%dx%d+375+0" % (width, height))
+
+        # Create A Main frame
+        main_frame = Frame(self.survey)
+        main_frame.pack(fill=BOTH, expand=1)
+
+        # Create Frame for X Scrollbar
+        sec = Frame(main_frame)
+        sec.pack(fill=X, side=BOTTOM)
+
+        # Create A Canvas
+        my_canvas = Canvas(main_frame)
+        my_canvas.pack(side=LEFT, fill=BOTH, expand=1)
+
+        # Add Scrollbars to Canvas
+        x_scrollbar = ttk.Scrollbar(sec, orient=HORIZONTAL, command=my_canvas.xview)
+        x_scrollbar.pack(side=BOTTOM, fill=X)
+        y_scrollbar = ttk.Scrollbar(main_frame, orient=VERTICAL, command=my_canvas.yview)
+        y_scrollbar.pack(side=RIGHT, fill=Y)
+
+        # Configure the canvas
+        my_canvas.configure(xscrollcommand=x_scrollbar.set)
+        my_canvas.configure(yscrollcommand=y_scrollbar.set)
+        my_canvas.bind("<Configure>", lambda e: my_canvas.config(scrollregion=my_canvas.bbox(ALL)))
+
+        # Frame for border
+        border = Frame(my_canvas, width=width, height=height)
+
+        # Add that New Frame a Window In The Canvas
+        my_canvas.create_window((0, 0), window=border, anchor="nw")
+
+        # title and instructions at the top of the page
         title = Label(border, text=TITLE, font=("Times New Roman", 28, "bold")).pack()
-        instructions = Label(border, text=INSTRUCTIONS, wraplength=width-75,
-                             font=("Times New Roman", 18),
-                             justify=LEFT).pack()
-        """
-        column1 = Frame(border, width = 600, height = height, bg='blue')
-        column1.pack_propagate(False)
-        column1.pack(side = LEFT)
-        for q in self.question:
-            Label(column1, text=q, font=("Times New Roman", 18)).pack()
-        """
+        instructions = Label(border, text=INSTRUCTIONS, wraplength=width-10,
+                             font=("Times New Roman", 18), justify=LEFT).pack()
+
+        # For each question add the question and possible answer selections
+        for phrase in self.question:
+            new_frame = Frame(border)
+            new_frame.pack(anchor="w")
+            q = Label(new_frame, text=phrase, font=("Times New Roman", 18)).pack(side=LEFT)
+            for opt in range(3):
+                answer_frame = Frame(new_frame)
+                answer_frame.pack(side=LEFT)
+                new_option = Radiobutton(answer_frame, value=opt).grid(row=0, column=opt+1)
+
         self.survey.mainloop()
 
 
 if __name__ == "__main__":
-    test = UI()
+    test = UI().display_survey()
