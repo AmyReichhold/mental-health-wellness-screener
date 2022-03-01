@@ -50,7 +50,12 @@ class UI():
         self.start = None
         self.survey = None
         self.question = questions   # this will be replaced with real question objects
-        self.init_interface()
+
+    def run(self):
+        if len(self.question) == 0:
+            print("Error: No questions")
+        else:
+            self.init_interface()
 
     def init_interface(self):
         self.start = Tk()
@@ -132,3 +137,4 @@ class UI():
 
 if __name__ == "__main__":
     test = UI()
+    test.run()
