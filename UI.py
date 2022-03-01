@@ -19,10 +19,10 @@ from tkinter import *
 from tkinter import ttk
 
 # Place Holder questions
-questions = []
+temp_questions = []
 for i in range(100):
     if i > 0:
-        questions.append(f"Question {i}")
+        temp_questions.append(f"Question {i}")
 
 
 #Global Variables
@@ -46,10 +46,10 @@ SOURCES = "For more information on the SDQ please visit: https://sdqinfo.org.\n"
 
 class UI():
 
-    def __init__(self):
+    def __init__(self, questions):
         self.start = None
         self.survey = None
-        self.question = questions   # this will be replaced with real question objects
+        self.question = questions
 
     def run(self):
         if len(self.question) == 0:
@@ -136,5 +136,5 @@ class UI():
 
 
 if __name__ == "__main__":
-    test = UI()
+    test = UI(temp_questions)
     test.run()
