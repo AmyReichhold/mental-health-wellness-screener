@@ -4,10 +4,10 @@ Script Name:    UI
 Description:    The user interface for administering the screener and
                 displaying the results
 
-Authors:        Luke Vandecasteele
+Authors:        Luke Vandecasteele, Quinn Fetrow
 
-Last Edited:    2/27/2022
-Last Edit by:   Luke Vandecasteele
+Last Edited:    3/1/2022
+Last Edit by:   Quinn Fetrow
 
 Credits: User Akash Shendage for his post on how to make a scrollbar using
          tkinter for an entire window.
@@ -17,6 +17,8 @@ Credits: User Akash Shendage for his post on how to make a scrollbar using
 
 from tkinter import *
 from tkinter import ttk
+from turtle import left
+from SDQ import SDQ
 
 # Place Holder questions
 temp_questions = []
@@ -49,10 +51,11 @@ class UI():
     def __init__(self, questions):
         self.start = None
         self.survey = None
-        self.question = questions
+        self.screener = SDQ()
+        self.answers = []
 
     def run(self):
-        if len(self.question) == 0:
+        if len(self.screener.questions) == 0:
             print("Error: No questions")
         else:
             self.init_interface()
@@ -123,16 +126,34 @@ class UI():
         instructions = Label(border, text=INSTRUCTIONS, wraplength=width-10,
                              font=("Times New Roman", 18), justify=LEFT).pack()
 
-        # For each question add the question and possible answer selections
-        y = 0
-        for phrase in self.question:
-            q = Label(border, text=phrase, font=("Times New Roman", 18)).pack(anchor="w")
-            for opt in range(3):
-                new_option = Radiobutton(border, value=opt)
-                new_option.place(x=850 + (45 * opt), y=155 + (29 * y))
-            y+=1
+        # Keeps track of placement of rows
+        i = 0
+        # holds all questions on display
+        questionsDisplay = Frame(border)  
 
+        for question in self.screener.questions:
+            qtext = Label(questionsDisplay, text=question.message, font=("Times New Roman", 18)).grid(sticky = W, row=i, column=0)
+            # Radio_answer is tied to the value given from the radio button objects
+            Radio_answer = IntVar()
+            for opt in range(3):
+                new_option = Radiobutton(questionsDisplay, value=opt, variable=Radio_answer).grid(row=i,column=opt+1)
+            # self.answers keeps an array of the "states"
+            self.answers.append(Radio_answer)
+            i+=1
+
+        questionsDisplay.pack()
+
+        submit = Button(border, text="Submit Screener", font=("Times New Roman", 20),
+                command=self.score_screener,
+                cursor="plus", padx=5, pady=10).pack()
         self.survey.mainloop()
+
+    def score_screener(self):
+        # Called when the user submits the questions, grades all questions
+        for i in range(len(self.answers)):
+            self.screener.questions[i].set_value(self.answers[i].get())
+            print(self.screener.questions[i].message + " " + str(self.screener.questions[i].value))
+        # TODO - Call get_results on the result module here, with graded questions
 
 
 if __name__ == "__main__":
