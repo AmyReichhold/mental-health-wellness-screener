@@ -3,10 +3,10 @@ Script Name:    question
 
 Description:    The question module that creates a question class
 
-Authors:        Nick Onofrei
+Authors:        Nick Onofrei, Quinn Fetrow
 
 Last Edited:    3/1/2022
-Last Edit by:   Nick Onofrei
+Last Edit by:   Quinn Fetrow
 """
 
 # Question class that instantiates the behavior of a question
@@ -26,4 +26,4 @@ class Question():
     # set_value method is made to be able to change the value stored for the question
     # This is used to change the value according to what the user pressed
     def set_value(self, value):
-        self.value = value
+        self.value = self.answer_array[value]
