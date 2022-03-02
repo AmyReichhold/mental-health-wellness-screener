@@ -1,0 +1,25 @@
+I try to be nice to other people. I care about their feelings; prosocial; normal_order
+I am restless, I cannot stay still for long; hyperactivity; normal_order
+I get a lot of headaches, stomach-aches or sickness; emotional; normal_order
+I usually share with others, for example CD's, games, food; prosocial; normal_order
+I get very angry and often lose my temper; conduct; normal_order
+I would rather be alone than with people of my age; peer; normal_order
+I usually do as I am told; conduct; reverse_order
+I worry a lot; emotional; normal_order
+I am helpful if someone is hurt, upset or feeling ill; prosocial; normal_order
+I am constantly fidgeting or squirming; hyperactivity; normal_order
+I have one good friend or more; peer; reversed_order
+I fight a lot. I can make other people do what I want; conduct; normal_order
+I am often unhappy, depressed or tearful; emotional; normal_order
+Other people my age generally like me; peer; reversed_order
+I am easily distracted, I find it difficult to concentrate; hyperactivity; normal_order
+I am nervous in new situations. I easily lose confidence; emotional; normal_order
+I am kind to younger children; prosocial; normal_order
+I am often accused of lying or cheating; conduct; normal_order
+Other children or young people pick on me or bully me; peer; normal_order
+I often offer to help others (parents, teachers, children); prosocial; normal_order
+I think before I do things; hyperactivity; reversed_order
+I take things that are not mine from home, school or elsewhere; conduct; normal_order
+I get along better with adults than with people my own age; peer; normal_order
+I have many fears, I am easily scared; emotional; normal_order
+I finish the work I'm doing. My attention is good; hyperactivity; reversed_order
