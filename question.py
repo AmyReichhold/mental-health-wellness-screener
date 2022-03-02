@@ -19,9 +19,6 @@ class Question():
         self.message = question_message
         self.answer_array = answer_array
         self.value = None
-        self.button1 = None
-        self.button2 = None
-        self.button3 = None
     
     # set_value method is made to be able to change the value stored for the question
     # This is used to change the value according to what the user pressed
