@@ -78,7 +78,7 @@ class Results:
         self.hyper_score = 0
         self.peer_score = 0
         self.prosocial_score = 0
-        self.total_difficulty_score = 0
+        self.total_difficulty_score =  0
 
     def get_results(self, questions: Iterable[Question]):
 
@@ -105,3 +105,82 @@ class Results:
 
         return None
 
+    def create_file(self):
+        # a new file called results.txt is created if it doesnt exist. If it exists,
+        # it is overwritten to give us a clean results.txt file.
+        file = open('results.txt', 'w')
+        return file
+
+
+    def store_results(self):
+
+        file = self.create_file()
+
+        name = ['Emotional Score', 'Conduct Score',
+        'Hyper Score',
+        'Peer Score',
+        'Prosocial Score',
+        'Total Difficulty Score']
+        score = [self.emotional_score, self.conduct_score, self.hyper_score, self.peer_score, self.prosocial_score, self.total_difficulty_score]
+
+        range1 = [range(0,15), range(15,18), range(18,20), range(20,41)] #total
+
+        range2 = [range(0,5) , range(5,6) , range(6,7), range(7,11)] #emotinal
+
+        range3 = [range(0,4), range(4,5) , range(5, 6) , range(6,10)] #conduct
+
+        range4 = [range(0,6), range(6, 7), range(7, 8), range(8,11)] #hyper
+
+        range5 = [range(0,3), range(3, 4),  range(4, 5), range(5,11)] #peer
+
+        range6 = [range(7, 11), range(6, 7), range(5, 6), range(0, 5)] #prosocial
+
+        array = ['Close to Average', 'Slightly Raised', 'High', 'Very High']
+        comparison = []
+
+
+        for i in range(0, len(range2)):
+            if self.emotional_score in range2[i]:
+                comparison.append(array[i])
+
+
+        for i in range(0, len(range3)):
+            if self.conduct_score in range3[i]:
+                comparison.append(array[i])
+
+
+        for i in range(0, len(range4)):
+            if self.hyper_score in range4[i]:
+                comparison.append(array[i])
+
+        for i in range(0, len(range5)):
+            if self.peer_score in range5[i]:
+                comparison.append(array[i])
+
+        for i in range(0, len(range6)):
+            if self.prosocial_score in range6[i]:
+                comparison.append(array[i])
+
+        for i in range(0, len(range1)):
+            if self.total_difficulty_score in range1[i]:
+                comparison.append(array[i])
+
+
+        for i in range(0, len(name)):
+            file.write(f'{name[i]}: {score[i]}, Risk Amount: {comparison[i]}\n')
+
+                #i#ndex = range1.index(self.total_difficulty_score)
+                #print(index)
+        #for i in range1:
+            #if self.total_difficulty_score in i:
+                #indx =
+                #print(range1[i])
+        #if self.total_difficulty_score in range1:
+
+            #print(range1[self.total_difficulty_score])
+
+        file.close()
+
+if __name__ == '__main__':
+    a = Results()
+    a.store_results()

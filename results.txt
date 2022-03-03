@@ -1,0 +1,6 @@
+Emotional Score: 0, Risk Amount: Close to Average
+Conduct Score: 0, Risk Amount: Close to Average
+Hyper Score: 0, Risk Amount: Close to Average
+Peer Score: 0, Risk Amount: Close to Average
+Prosocial Score: 0, Risk Amount: Very High
+Total Difficulty Score: 0, Risk Amount: Close to Average
