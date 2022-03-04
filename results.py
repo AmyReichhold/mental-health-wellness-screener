@@ -83,13 +83,13 @@ class Results:
     def get_results(self, questions: Iterable[Question]):
 
         for question in questions:
-            if question.category == 'emotional problems':
+            if question.category == 'emotional':
                 self.emotional_score += question.value
-            elif question.category == 'conduct problems':
+            elif question.category == 'conduct':
                 self.conduct_score += question.value
             elif question.category == 'hyperactivity':
                 self.hyper_score += question.value
-            elif question.category == 'peer problems':
+            elif question.category == 'peer':
                 self.peer_score += question.value
             elif question.category == 'prosocial':
                 self.prosocial_score += question.value
@@ -158,7 +158,7 @@ class Results:
         question = {}
         for qs in questions:
             msg = qs.message
-            ans = qs.value
+            ans = qs.value_to_plaintext()
             question[msg] = ans
 
 

@@ -19,6 +19,7 @@ from tkinter import *
 from tkinter import ttk
 from turtle import left
 from SDQ import SDQ
+from results import *
 
 # Place Holder questions
 temp_questions = []
@@ -52,7 +53,7 @@ class UI():
         self.start = None
         self.survey = None
         self.screener = SDQ()
-        self.answers = []
+        self.scorer = Results()
 
     def run(self):
         if len(self.screener.questions) == 0:
@@ -126,20 +127,22 @@ class UI():
         instructions = Label(border, text=INSTRUCTIONS, wraplength=width-10,
                              font=("Times New Roman", 18), justify=LEFT).pack()
 
-        # Keeps track of placement of rows
-        i = 0
         # holds all questions on display
-        questionsDisplay = Frame(border)  
+        questionsDisplay = Frame(border) 
+
+        # Keeps track of which row to place the question in 
+        rowtrack = 0
 
         for question in self.screener.questions:
-            qtext = Label(questionsDisplay, text=question.message, font=("Times New Roman", 18)).grid(sticky = W, row=i, column=0)
+            qtext = Label(questionsDisplay, text=question.message, font=("Times New Roman", 18)).grid(sticky = W, row=rowtrack, column=0)
             # Radio_answer is tied to the value given from the radio button objects
             Radio_answer = IntVar()
             for opt in range(3):
-                new_option = Radiobutton(questionsDisplay, value=opt, variable=Radio_answer).grid(row=i,column=opt+1)
-            # self.answers keeps an array of the "states"
-            self.answers.append(Radio_answer)
-            i+=1
+                new_option = Radiobutton(questionsDisplay, value=opt, variable=Radio_answer).grid(row=rowtrack,column=opt+1)
+            # each question keeps track of the state of it's answer, once
+            # the submit button is pressed, the question sets it's value equal to its state
+            question.set_answerstate(Radio_answer)
+            rowtrack+=1
 
         questionsDisplay.pack()
 
@@ -150,10 +153,11 @@ class UI():
 
     def score_screener(self):
         # Called when the user submits the questions, grades all questions
-        for i in range(len(self.answers)):
-            self.screener.questions[i].set_value(self.answers[i].get())
+        for i in range(len(self.screener.questions)):
+            self.screener.questions[i].set_value()
             print(self.screener.questions[i].message + " " + str(self.screener.questions[i].value))
-        # TODO - Call get_results on the result module here, with graded questions
+        self.scorer.get_results(self.screener.questions)
+        self.scorer.store_results(self.screener.questions)
 
 
 if __name__ == "__main__":
