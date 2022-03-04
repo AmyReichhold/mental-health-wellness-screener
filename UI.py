@@ -53,7 +53,6 @@ class UI():
         self.start = None
         self.survey = None
         self.screener = SDQ()
-        self.scorer = Results()
 
     def run(self):
         if len(self.screener.questions) == 0:
@@ -147,17 +146,10 @@ class UI():
         questionsDisplay.pack()
 
         submit = Button(border, text="Submit Screener", font=("Times New Roman", 20),
-                command=self.score_screener,
+                command=self.screener.submit,
                 cursor="plus", padx=5, pady=10).pack()
         self.survey.mainloop()
 
-    def score_screener(self):
-        # Called when the user submits the questions, grades all questions
-        for i in range(len(self.screener.questions)):
-            self.screener.questions[i].set_value()
-            print(self.screener.questions[i].message + " " + str(self.screener.questions[i].value))
-        self.scorer.get_results(self.screener.questions)
-        self.scorer.store_results(self.screener.questions)
 
 
 if __name__ == "__main__":

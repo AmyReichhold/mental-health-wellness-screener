@@ -11,7 +11,7 @@ Last Edit by:   Quinn Fetrow
 
 Credits: 
 """
-
+from results import *
 from question import Question
 import os.path
 
@@ -20,6 +20,7 @@ class SDQ:
     def __init__(self):
         # Generates questions on startup
         self.questions = self.generate_survey()
+        self.results = Results()
 
     def generate_survey(self):
         # Reads and parses question information from local questionnaire.txt file
@@ -44,9 +45,16 @@ class SDQ:
                     answer_array = [2,1,0]
                 questions.append(Question(category, message, answer_array)) 
         if len(questions) != 25:
-            print("Data corrupted/Changed")
-            #TODO - implement better error correction   
+            print("Data corrupted/Changed")  
         return questions
+    
+    def submit(self):
+        # Calculate and store results, called from Survey Interface when answers are submitted
+        for question in self.questions:
+            question.set_value()
+        self.results.get_results(self.questions)
+        self.results.store_results(self.questions)
+
         
 if __name__ == "__main__":
     classs = SDQ()
