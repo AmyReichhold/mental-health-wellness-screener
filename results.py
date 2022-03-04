@@ -78,7 +78,7 @@ class Results:
         self.hyper_score = 0
         self.peer_score = 0
         self.prosocial_score = 0
-        self.total_difficulty_score =  0
+        self.total_difficulty_score = 0
 
     def get_results(self, questions: Iterable[Question]):
 
@@ -111,17 +111,21 @@ class Results:
         file = open('results.txt', 'w')
         return file
 
+    def get_result(self, scoretype, ranges):
+        for i in range(0, len(ranges)):
+            if scoretype in ranges[i]:
+                return i
 
-    def store_results(self):
+
+    def store_results(self, questions: Iterable[Question]):
 
         file = self.create_file()
 
-        name = ['Emotional Score', 'Conduct Score',
-        'Hyper Score',
-        'Peer Score',
-        'Prosocial Score',
-        'Total Difficulty Score']
-        score = [self.emotional_score, self.conduct_score, self.hyper_score, self.peer_score, self.prosocial_score, self.total_difficulty_score]
+        name = ['Emotional Score', 'Conduct Score', 'Hyper Score',
+                'Peer Score','Prosocial Score', 'Total Difficulty Score']
+
+        score = [self.emotional_score, self.conduct_score, self.hyper_score,
+                 self.peer_score, self.prosocial_score, self.total_difficulty_score]
 
         range1 = [range(0,15), range(15,18), range(18,20), range(20,41)] #total
 
@@ -136,51 +140,38 @@ class Results:
         range6 = [range(7, 11), range(6, 7), range(5, 6), range(0, 5)] #prosocial
 
         array = ['Close to Average', 'Slightly Raised', 'High', 'Very High']
-        comparison = []
 
+        emo_res = array[self.get_result(self.emotional_score, range2)]
 
-        for i in range(0, len(range2)):
-            if self.emotional_score in range2[i]:
-                comparison.append(array[i])
+        cond_res = array[self.get_result(self.conduct_score, range3)]
 
+        hyp_res = array[self.get_result(self.hyper_score, range4)]
 
-        for i in range(0, len(range3)):
-            if self.conduct_score in range3[i]:
-                comparison.append(array[i])
+        peer_res = array[self.get_result(self.peer_score, range5)]
 
+        pros_res = array[self.get_result(self.prosocial_score, range6)]
 
-        for i in range(0, len(range4)):
-            if self.hyper_score in range4[i]:
-                comparison.append(array[i])
+        tds_res = array[self.get_result(self.total_difficulty_score, range1)]
 
-        for i in range(0, len(range5)):
-            if self.peer_score in range5[i]:
-                comparison.append(array[i])
+        comparison = [emo_res,cond_res, hyp_res, peer_res, pros_res, tds_res]
 
-        for i in range(0, len(range6)):
-            if self.prosocial_score in range6[i]:
-                comparison.append(array[i])
-
-        for i in range(0, len(range1)):
-            if self.total_difficulty_score in range1[i]:
-                comparison.append(array[i])
+        question = {}
+        for qs in questions:
+            msg = qs.message
+            ans = qs.value
+            question[msg] = ans
 
 
         for i in range(0, len(name)):
             file.write(f'{name[i]}: {score[i]}, Risk Amount: {comparison[i]}\n')
+        file.write(f'\n_____________________Questions & Answers_____________________\n')
 
-                #i#ndex = range1.index(self.total_difficulty_score)
-                #print(index)
-        #for i in range1:
-            #if self.total_difficulty_score in i:
-                #indx =
-                #print(range1[i])
-        #if self.total_difficulty_score in range1:
+        for i in question:
+            file.write(f'Question: {i}\nAnswer: {question[i]}\n')
 
-            #print(range1[self.total_difficulty_score])
 
         file.close()
 
-if __name__ == '__main__':
-    a = Results()
-    a.store_results()
+#if __name__ == '__main__':
+    #a = Results()
+    #a.store_results()
