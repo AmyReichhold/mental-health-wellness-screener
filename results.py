@@ -6,26 +6,16 @@ Description:    The Results class for the Mental Health & Wellness
                 Calculates the SDQ score. The score is broken down into 
                 5 scale scores and the total difficulties score.
 
-Authors:        Amy Reichhold
+Authors:        Amy Reichhold, Michael Gao, Luke Vandecasteele
 
-Last Edited:    2/25/2022
-Last Edit by:   Amy Reichhold
+Last Edited:    3/4/2022
+Last Edit by:   Luke Vandecasteele
 """
 from typing import Iterable
 
 from question import Question
 
-# This section will go in the question.py; indices correspond with a 0-based
-# index of the questions on the SDQ, reading from top to bottom.
-# You might not need the emotional/conduct/etc. indices if you already know
-# which category it is, but you can set the score_array for a question if you
-# have a question index i like this:
-#
-#   if i in SCORE_2_1_0_INDICES:
-#       question.score_array = list(MAPPING_2_1_0.values())
-#   else:
-#       question.score_array = list(MAPPING_0_1_2.values())
-##############################################################################
+
 # There scoring process is composed of 5 scales (listed below).
 # The indices below are the questions that belong to each scale. 
 EMOTIONAL_INDICES = (2, 8, 12, 15, 23)
@@ -49,30 +39,8 @@ MAPPING_2_1_0 = {'n': 2, 's': 1, 'c': 0}
 ##############################################################################
 
 class Results:
-    """
-    A class to sum up all of the scores from the 25 questions from the 
-    screener. There are 5 scales: emotional problems, conduct problems,
-    hyperactivity, peer problems, and prosocial. Each scale is composed of
-    5 questions.
 
-    Attributes
-    =========================================================================
-    emotional_score
-    conduct_score
-    hyper_score
-    peer_score
-    prosocial_score
-    total_difficulty_score
-
-    Methods
-    =========================================================================
-    get_results(questions)
-        Goes through every question and sums the question scores to the 
-        respective categoriese each question belongs to. The function then 
-        sums the first four scales to get the total difficulty score.
-
-    """
-
+    # stores overall scores for each section of the SDQ
     def __init__(self):
         self.emotional_score = 0
         self.conduct_score = 0
@@ -81,6 +49,8 @@ class Results:
         self.prosocial_score = 0
         self.total_difficulty_score = 0
 
+    # checks which category each question belongs too and increments the
+    # respective category based upon the users answer
     def get_results(self, questions: Iterable[Question]):
 
         for question in questions:
@@ -95,6 +65,7 @@ class Results:
             elif question.category == 'prosocial':
                 self.prosocial_score += question.value
             else:
+                # all questions must belong to one of the categories
                 raise ValueError('Invalid category.')
 
         # The SDQ website says the total difficulties score is the sum of 
@@ -106,78 +77,78 @@ class Results:
 
         return None
 
+    # a new file called results.txt is created if it doesn't exist. If it
+    # exists, it is overwritten to give us a clean results.txt file.
     def create_file(self):
-        # a new file called results.txt is created if it doesnt exist. If it
-        # exists,
-        # it is overwritten to give us a clean results.txt file.
         file = open('results.txt', 'w')
         return file
 
+    # returns the range that a certain categories score falls into
     def get_result(self, scoretype, ranges):
         for i in range(0, len(ranges)):
             if scoretype in ranges[i]:
                 return i
 
+    # generates the text versions of the results that are printed to the
+    # output file for the user to view
     def store_results(self, questions: Iterable[Question]):
 
+        # create/replace result file
         file = self.create_file()
 
+        # titles for each section and the corresponding scores
         name = ['Emotional Score', 'Conduct Score', 'Hyper Score',
                 'Peer Score', 'Prosocial Score', 'Total Difficulty Score']
-
         score = [self.emotional_score, self.conduct_score, self.hyper_score,
                  self.peer_score, self.prosocial_score,
                  self.total_difficulty_score]
 
+        # labels for the different risk ranges
+        array = ['Close to Average', 'Slightly Raised', 'High', 'Very High']
+
+        # 4 risk ranges for each of the 6 different categories
         range1 = [range(0, 15), range(15, 18), range(18, 20),
                   range(20, 41)]  # total
-
         range2 = [range(0, 5), range(5, 6), range(6, 7),
-                  range(7, 11)]  # emotinal
-
+                  range(7, 11)]  # emotional
         range3 = [range(0, 4), range(4, 5), range(5, 6),
                   range(6, 10)]  # conduct
-
         range4 = [range(0, 6), range(6, 7), range(7, 8), range(8, 11)]  # hyper
-
         range5 = [range(0, 3), range(3, 4), range(4, 5), range(5, 11)]  # peer
-
         range6 = [range(7, 11), range(6, 7), range(5, 6),
                   range(0, 5)]  # prosocial
 
-        array = ['Close to Average', 'Slightly Raised', 'High', 'Very High']
-
+        # for each category, find the amount of risk based off the score in
+        # the category, and the ranges for that category
         emo_res = array[self.get_result(self.emotional_score, range2)]
-
         cond_res = array[self.get_result(self.conduct_score, range3)]
-
         hyp_res = array[self.get_result(self.hyper_score, range4)]
-
         peer_res = array[self.get_result(self.peer_score, range5)]
-
         pros_res = array[self.get_result(self.prosocial_score, range6)]
-
         tds_res = array[self.get_result(self.total_difficulty_score, range1)]
 
+        # store the amount of risk in a list for easier access
         comparison = [emo_res, cond_res, hyp_res, peer_res, pros_res, tds_res]
 
+        # store the questions:answers as key:value pairs
+        # these will also be printed to the result file to remind the user of
+        # their answers
         question = {}
         for qs in questions:
             msg = qs.message
             ans = qs.value_to_plaintext()
             question[msg] = ans
 
+        # first print the users risk for each of the sections
         for i in range(0, len(name)):
             file.write(f'{name[i]}: {score[i]}, Risk Amount: {comparison[i]}\n')
+
+        # print questions and the users answers
         file.write(
             f'\n_____________________Questions & '
             f'Answers_____________________\n')
-
         for i in question:
             file.write(f'Question: {i}\nAnswer: {question[i]}\n')
 
+        # close the result file
         file.close()
-
-# if __name__ == '__main__':
-# a = Results()
-# a.store_results()

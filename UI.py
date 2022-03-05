@@ -59,23 +59,32 @@ FINAL_MESSAGE = "You have completed the SDQ mental health screener!\n\nTo " \
 
 class UI():
 
-    def __init__(self, questions):
+    # holds various tkinter windows and imports the questions using the SDQ
+    # module
+    def __init__(self):
         self.start = None
         self.survey = None
         self.final = None
         self.screener = SDQ()
 
+    # main driver function
     def run(self):
+        #check that questions were properly imported
         if len(self.screener.questions) == 0:
             print("Error: No questions")
         else:
             self.init_interface()
 
+    # main menu window for the screener. displays instructions and general
+    # information about the screener
     def init_interface(self):
+        # main window
         self.start = Tk()
         self.start.title(PROJECT)
         self.start.geometry("1000x500+375+175")
         self.start.configure(bg="turquoise")
+
+        # various labels and instructions for the window
         title = Label(self.start, text=TITLE,
                       font=("Times New Roman", 32, "bold"),
                       bg="turquoise", fg='black').pack()
@@ -88,6 +97,8 @@ class UI():
         warning = Label(self.start, text=WARNING, wraplength=800,
                         font=("Times New Roman", 20), justify=LEFT,
                         bg="turquoise", fg='black').pack()
+
+        # buttons to start the screener
         begin = Button(self.start, text="Begin Screener",
                        font=("Times New Roman", 20),
                        command=lambda: [self.start.destroy(),
@@ -96,10 +107,13 @@ class UI():
         sources = Label(self.start, text=SOURCES, wraplength=800,
                         font=("Times New Roman", 12), justify=CENTER,
                         bg="turquoise", fg='black').pack(side=BOTTOM)
+
+        # start the window once it has been configured
         self.start.mainloop()
 
+    # window for the actual SDQ screener
     def display_survey(self):
-        # Create window
+        # create main window
         self.survey = Tk()
         self.survey.title(PROJECT)
         height = self.survey.winfo_screenheight() - 10
@@ -147,6 +161,7 @@ class UI():
         # holds all questions on display
         questionsDisplay = Frame(border)
 
+        # labels for the answers to each question
         n_true = Label(questionsDisplay, text="Not  \nTrue   ",
                        font=("Times New Roman", 15)).grid(sticky=W, row=0,
                                                           column=1)
@@ -161,6 +176,7 @@ class UI():
         # start with 1 for the labels above
         rowtrack = 1
 
+        # place each question on the grid
         for question in self.screener.questions:
             qtext = Label(questionsDisplay, text=question.message,
                           font=("Times New Roman", 18)).grid(sticky=W,
@@ -179,25 +195,34 @@ class UI():
             # equal to its state
             question.set_answerstate(Radio_answer)
             rowtrack += 1
-
+        # place question grid onto the frame
         questionsDisplay.pack()
 
+        # final submit button to generate results and move to final window
         submit = Button(border, text="Submit Screener",
                         font=("Times New Roman", 20),
                         command=lambda: {self.survey.destroy(),
                                          self.screener.submit,
                                          self.final_window()},
                         cursor="plus", padx=5, pady=10).pack()
+        # start the configured window
         self.survey.mainloop()
 
+    # final window. gives instructions on how to view the results and options
+    # to take the test again, or end the program
     def final_window(self):
+        # create window
         self.final = Tk()
         self.final.title(PROJECT)
         self.final.configure(bg="turquoise")
         self.final.geometry("800x250+200+200")
+
+        # instructions and help for the user
         message = Label(self.final, text=FINAL_MESSAGE,
                         font=("Times New Roman", 20),
                         bg="turquoise", wraplength=780).pack()
+
+        # buttons to restart and end appliction
         buttons = Frame(self.final)
         repeat = Button(buttons, text="Take Again",
                         font=("Times New Roman", 20),
@@ -207,10 +232,13 @@ class UI():
         finish = Button(buttons, text="Finish", font=("Times New Roman", 20),
                         command=self.final.destroy,
                         cursor="plus", padx=5, pady=10).grid(row=0, column=2)
+
+        # start the configured window
         buttons.pack()
         self.final.mainloop()
 
 
+# start the user interface when run
 if __name__ == "__main__":
-    test = UI(temp_questions)
+    test = UI()
     test.run()

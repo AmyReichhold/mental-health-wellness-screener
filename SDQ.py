@@ -4,10 +4,10 @@ Script Name:    SDQ
 Description:    The SDQ module creates and keeps track of all questions, and
                 sends the questions to the result module
 
-Authors:        Quinn Fetrow
+Authors:        Quinn Fetrow, Luke Vandecasteele
 
 Last Edited:    03/01/2022
-Last Edit by:   Quinn Fetrow
+Last Edit by:   Luke Vandecasteele
 
 Credits: 
 """
@@ -59,7 +59,3 @@ class SDQ:
             question.set_value()
         self.results.get_results(self.questions)
         self.results.store_results(self.questions)
-
-
-if __name__ == "__main__":
-    classs = SDQ()
