@@ -6,8 +6,8 @@ Description:    The user interface for administering the screener and
 
 Authors:        Luke Vandecasteele, Quinn Fetrow
 
-Last Edited:    3/1/2022
-Last Edit by:   Quinn Fetrow
+Last Edited:    3/4/2022
+Last Edit by:   Luke Vandecasteele
 
 Credits: User Akash Shendage for his post on how to make a scrollbar using
          tkinter for an entire window.
@@ -45,6 +45,12 @@ WARNING = "This screener is only for personal use. Do NOT share the results" \
 SOURCES = "For more information on the SDQ please visit: https://sdqinfo.org.\n" \
           "To learn more about this project please visit the documentation " \
           "listed on the github repo at https://github.com/lvandeca/CIS422Project2-Screener"
+FINAL_MESSAGE = "You have completed the SDQ mental health screener!\n\nTo view your results, you will" \
+                " find a file labeled 'results.txt' " \
+                "in the same folder as this application that will contain a complete " \
+                "summary. Please remember, these results are intended for personal viewing, " \
+                "or with the help of a psychologist.\n\nThank you for taking the SQD! Please select 'Take Again' " \
+                "to take the screener again or select 'Finish' to close the application."
 
 
 class UI():
@@ -52,6 +58,7 @@ class UI():
     def __init__(self, questions):
         self.start = None
         self.survey = None
+        self.final = None
         self.screener = SDQ()
 
     def run(self):
@@ -127,10 +134,15 @@ class UI():
                              font=("Times New Roman", 18), justify=LEFT).pack()
 
         # holds all questions on display
-        questionsDisplay = Frame(border) 
+        questionsDisplay = Frame(border)
 
-        # Keeps track of which row to place the question in 
-        rowtrack = 0
+        n_true = Label(questionsDisplay, text="Not  \nTrue   ", font=("Times New Roman", 15)).grid(sticky=W, row=0,column=1)
+        s_true = Label(questionsDisplay, text="Somewhat\nTrue", font=("Times New Roman", 15)).grid(sticky=W, row=0,column=2)
+        c_true = Label(questionsDisplay, text="Certainly\nTrue", font=("Times New Roman", 15)).grid(sticky=W, row=0,column=3)
+
+        # Keeps track of which row to place the question in
+        # start with 1 for the labels above
+        rowtrack = 1
 
         for question in self.screener.questions:
             qtext = Label(questionsDisplay, text=question.message, font=("Times New Roman", 18)).grid(sticky = W, row=rowtrack, column=0)
@@ -146,9 +158,25 @@ class UI():
         questionsDisplay.pack()
 
         submit = Button(border, text="Submit Screener", font=("Times New Roman", 20),
-                command=self.screener.submit,
+                command=lambda:{self.survey.destroy(), self.screener.submit, self.final_window()},
                 cursor="plus", padx=5, pady=10).pack()
         self.survey.mainloop()
+
+    def final_window(self):
+        self.final = Tk()
+        self.final.title(PROJECT)
+        self.final.configure(bg="turquoise")
+        self.final.geometry("800x250+200+200")
+        message = Label(self.final, text=FINAL_MESSAGE, font=("Times New Roman", 20),
+                        bg="turquoise", wraplength=780).pack()
+        buttons = Frame(self.final)
+        repeat = Button(buttons, text="Take Again", font=("Times New Roman", 20), command=self.init_interface,
+                        cursor="plus", padx=5, pady=10).grid(row=0,column=0)
+        finish = Button(buttons, text="Finish", font=("Times New Roman", 20), command=self.final.destroy,
+                        cursor="plus", padx=5, pady=10).grid(row=0,column=2)
+        buttons.pack()
+        self.final.mainloop()
+
 
 
 
