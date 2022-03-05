@@ -145,7 +145,8 @@ class UI():
         rowtrack = 1
 
         for question in self.screener.questions:
-            qtext = Label(questionsDisplay, text=question.message, font=("Times New Roman", 18)).grid(sticky = W, row=rowtrack, column=0)
+            qtext = Label(questionsDisplay, text=question.message,
+                          font=("Times New Roman", 18)).grid(sticky = W, row=rowtrack, column=0)
             # Radio_answer is tied to the value given from the radio button objects
             Radio_answer = IntVar()
             for opt in range(3):
@@ -170,7 +171,8 @@ class UI():
         message = Label(self.final, text=FINAL_MESSAGE, font=("Times New Roman", 20),
                         bg="turquoise", wraplength=780).pack()
         buttons = Frame(self.final)
-        repeat = Button(buttons, text="Take Again", font=("Times New Roman", 20), command=self.init_interface,
+        repeat = Button(buttons, text="Take Again", font=("Times New Roman", 20),
+                        command=lambda:{self.final.destroy(), self.init_interface()},
                         cursor="plus", padx=5, pady=10).grid(row=0,column=0)
         finish = Button(buttons, text="Finish", font=("Times New Roman", 20), command=self.final.destroy,
                         cursor="plus", padx=5, pady=10).grid(row=0,column=2)
