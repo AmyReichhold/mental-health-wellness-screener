@@ -15,6 +15,7 @@ from results import *
 from question import Question
 import os.path
 
+
 class SDQ:
 
     def __init__(self):
@@ -23,7 +24,8 @@ class SDQ:
         self.results = Results()
 
     def generate_survey(self):
-        # Reads and parses question information from local questionnaire.txt file
+        # Reads and parses question information from local questionnaire.txt
+        # file
         if (not os.path.exists('questionnaire.txt')):
             print("File not found")
             return
@@ -31,30 +33,33 @@ class SDQ:
         lines = qfile.readlines()
         questions = []
         for line in lines:
-            # Each line contains semicolons that separate the question information
+            # Each line contains semicolons that separate the question
+            # information
             line_parse = line.split(';')
             # Ensure no out of range/user errors
             if len(line_parse) == 3:
                 message = line_parse[0]
                 category = line_parse[1].strip()
-                # The third parameter in the input file is either "normal_order" or "reversed_order"
+                # The third parameter in the input file is either
+                # "normal_order" or "reversed_order"
                 # these correspond to how the question will be scored
                 if line_parse[2].strip() == "normal_order":
-                    answer_array = [0,1,2]
+                    answer_array = [0, 1, 2]
                 else:
-                    answer_array = [2,1,0]
-                questions.append(Question(category, message, answer_array)) 
+                    answer_array = [2, 1, 0]
+                questions.append(Question(category, message, answer_array))
         if len(questions) != 25:
-            print("Data corrupted/Changed")  
+            print("Data corrupted/Changed")
         return questions
-    
+
     def submit(self):
-        # Calculate and store results, called from Survey Interface when answers are submitted
+        # Calculate and store results, called from Survey Interface when
+        # answers are submitted
         for question in self.questions:
             question.set_value()
         self.results.get_results(self.questions)
         self.results.store_results(self.questions)
 
-        
+
 if __name__ == "__main__":
     classs = SDQ()

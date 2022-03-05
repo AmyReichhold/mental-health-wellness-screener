@@ -15,7 +15,6 @@ from typing import Iterable
 
 from question import Question
 
-
 # This section will go in the question.py; indices correspond with a 0-based
 # index of the questions on the SDQ, reading from top to bottom.
 # You might not need the emotional/conduct/etc. indices if you already know
@@ -45,6 +44,8 @@ MAPPING_0_1_2 = {'n': 0, 's': 1, 'c': 2}
 # 5/25 questions use the 2_1_0 scoring method. 
 # (Which 5 is shown in SCORE_2_1_0_INDICES) 
 MAPPING_2_1_0 = {'n': 2, 's': 1, 'c': 0}
+
+
 ##############################################################################
 
 class Results:
@@ -106,7 +107,8 @@ class Results:
         return None
 
     def create_file(self):
-        # a new file called results.txt is created if it doesnt exist. If it exists,
+        # a new file called results.txt is created if it doesnt exist. If it
+        # exists,
         # it is overwritten to give us a clean results.txt file.
         file = open('results.txt', 'w')
         return file
@@ -116,28 +118,32 @@ class Results:
             if scoretype in ranges[i]:
                 return i
 
-
     def store_results(self, questions: Iterable[Question]):
 
         file = self.create_file()
 
         name = ['Emotional Score', 'Conduct Score', 'Hyper Score',
-                'Peer Score','Prosocial Score', 'Total Difficulty Score']
+                'Peer Score', 'Prosocial Score', 'Total Difficulty Score']
 
         score = [self.emotional_score, self.conduct_score, self.hyper_score,
-                 self.peer_score, self.prosocial_score, self.total_difficulty_score]
+                 self.peer_score, self.prosocial_score,
+                 self.total_difficulty_score]
 
-        range1 = [range(0,15), range(15,18), range(18,20), range(20,41)] #total
+        range1 = [range(0, 15), range(15, 18), range(18, 20),
+                  range(20, 41)]  # total
 
-        range2 = [range(0,5) , range(5,6) , range(6,7), range(7,11)] #emotinal
+        range2 = [range(0, 5), range(5, 6), range(6, 7),
+                  range(7, 11)]  # emotinal
 
-        range3 = [range(0,4), range(4,5) , range(5, 6) , range(6,10)] #conduct
+        range3 = [range(0, 4), range(4, 5), range(5, 6),
+                  range(6, 10)]  # conduct
 
-        range4 = [range(0,6), range(6, 7), range(7, 8), range(8,11)] #hyper
+        range4 = [range(0, 6), range(6, 7), range(7, 8), range(8, 11)]  # hyper
 
-        range5 = [range(0,3), range(3, 4),  range(4, 5), range(5,11)] #peer
+        range5 = [range(0, 3), range(3, 4), range(4, 5), range(5, 11)]  # peer
 
-        range6 = [range(7, 11), range(6, 7), range(5, 6), range(0, 5)] #prosocial
+        range6 = [range(7, 11), range(6, 7), range(5, 6),
+                  range(0, 5)]  # prosocial
 
         array = ['Close to Average', 'Slightly Raised', 'High', 'Very High']
 
@@ -153,7 +159,7 @@ class Results:
 
         tds_res = array[self.get_result(self.total_difficulty_score, range1)]
 
-        comparison = [emo_res,cond_res, hyp_res, peer_res, pros_res, tds_res]
+        comparison = [emo_res, cond_res, hyp_res, peer_res, pros_res, tds_res]
 
         question = {}
         for qs in questions:
@@ -161,17 +167,17 @@ class Results:
             ans = qs.value_to_plaintext()
             question[msg] = ans
 
-
         for i in range(0, len(name)):
             file.write(f'{name[i]}: {score[i]}, Risk Amount: {comparison[i]}\n')
-        file.write(f'\n_____________________Questions & Answers_____________________\n')
+        file.write(
+            f'\n_____________________Questions & '
+            f'Answers_____________________\n')
 
         for i in question:
             file.write(f'Question: {i}\nAnswer: {question[i]}\n')
 
-
         file.close()
 
-#if __name__ == '__main__':
-    #a = Results()
-    #a.store_results()
+# if __name__ == '__main__':
+# a = Results()
+# a.store_results()
