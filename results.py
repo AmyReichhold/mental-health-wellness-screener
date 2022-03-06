@@ -15,32 +15,9 @@ from typing import Iterable
 
 from question import Question
 
-
-# There scoring process is composed of 5 scales (listed below).
-# The indices below are the questions that belong to each scale. 
-EMOTIONAL_INDICES = (2, 8, 12, 15, 23)
-CONDUCT_INDICES = (4, 6, 11, 17, 21)
-HYPERACTIVITY_INDICES = (1, 9, 14, 20, 24)
-PEER_INDICES = (5, 10, 13, 18, 22)
-PROSOCIAL_INDICES = (0, 3, 8, 16, 19)
-
-# This keeps track of the 5 questions that are scored differently
-SCORE_2_1_0_INDICES = (6, 20, 24, 10, 13)
-
-# The scoring process varies with certain questions.
-# 20/25 questions use the 0_1_2 scoring methode.
-MAPPING_0_1_2 = {'n': 0, 's': 1, 'c': 2}
-
-# 5/25 questions use the 2_1_0 scoring method. 
-# (Which 5 is shown in SCORE_2_1_0_INDICES) 
-MAPPING_2_1_0 = {'n': 2, 's': 1, 'c': 0}
-
-
-##############################################################################
-
 class Results:
 
-    # stores overall scores for each section of the SDQ
+    # stores overall scores for each category of the SDQ
     def __init__(self):
         self.emotional_score = 0
         self.conduct_score = 0
