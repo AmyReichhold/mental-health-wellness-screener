@@ -70,7 +70,7 @@ class UI():
     # main driver function
     def run(self):
         #check that questions were properly imported
-        if len(self.screener.questions) == 0:
+        if self.screener.questions == None:
             print("Error: No questions")
         else:
             self.init_interface()
