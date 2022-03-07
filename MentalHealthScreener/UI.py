@@ -202,7 +202,7 @@ class UI():
         submit = Button(border, text="Submit Screener",
                         font=("Times New Roman", 20),
                         command=lambda: {self.survey.destroy(),
-                                         self.screener.submit,
+                                         self.screener.submit(),
                                          self.final_window()},
                         cursor="plus", padx=5, pady=10).pack()
         # start the configured window
